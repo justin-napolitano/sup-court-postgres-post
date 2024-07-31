@@ -1,11 +1,12 @@
 +++
 title =  "PostGreSQL Java"
-description = "Learning java with DBs
+description = "Learning java with DBs"
 tags = ['python', "mysql","databases"]
 images = ["images/feature-image.png"]
 date = "2024-07-31T15:25:13-05:00"
 categories = ["projects"]
 series = ["Java"]
++++
 
 # How to Set Up a PostgreSQL Database and Tables Using Java and Maven
 
