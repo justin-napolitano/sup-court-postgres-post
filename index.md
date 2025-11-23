@@ -1,310 +1,60 @@
-+++
-title =  "PostGreSQL Java"
-description = "Learning java with DBs"
-tags = ['python', "mysql","databases"]
-images = ["images/feature-image.png"]
-date = "2024-07-31T15:25:13-05:00"
-categories = ["projects"]
-series = ["Java"]
-+++
+---
+slug: "github-sup-court-postgres-post"
+title: "sup-court-postgres-post"
+repo: "justin-napolitano/sup-court-postgres-post"
+githubUrl: "https://github.com/justin-napolitano/sup-court-postgres-post"
+generatedAt: "2025-11-23T09:41:41.833249Z"
+source: "github-auto"
+---
 
-# How to Set Up a PostgreSQL Database and Tables Using Java and Maven
 
-I've been working on this supreme court case thing. I recently played with DataShare to see if I could use something out of the box for some analysis. It was an okay tool... but not really powerful enough for my use case. I want to create automated workflows at some scale and build out applications that are more versatile. So I am starting over with Java.. which I haven't really used in about 15 years.  
+# Setting Up PostgreSQL with Java and Maven: A Technical Reference
 
-## Prerequisites
+This project documents the process of setting up a PostgreSQL database environment and integrating it with a Java application using Maven. The motivation stems from the need to build scalable, automated workflows for analyzing supreme court case data, moving beyond the limitations of off-the-shelf tools like DataShare.
 
-- Basic knowledge of Java and Maven
-- Docker installed on your machine
-- PostgreSQL JDBC Driver
+## Motivation and Problem Statement
 
-## Step 1: Set Up PostgreSQL with Docker
+The initial exploration involved using DataShare for data analysis, which proved insufficient for the complexity and scale of the intended workflows. The goal is to develop a more versatile and scalable system by leveraging Java for application development and PostgreSQL for reliable data storage and querying.
 
-First, let's create a Docker container for PostgreSQL and Adminer, a web-based database management tool.
+## Project Setup
 
-Create a `docker-compose.yml` file with the following content:
+### Database Environment
 
-```yaml
-version: '3.9'
+PostgreSQL is deployed using Docker Compose alongside Adminer, a lightweight web-based database management tool. This setup allows for rapid initialization and management of the database without manual installation steps.
 
-services:
-  db:
-    image: postgres:latest
-    restart: always
-    shm_size: 128mb
-    environment:
-      POSTGRES_USER: example
-      POSTGRES_PASSWORD: example
-      POSTGRES_DB: example
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+The `docker-compose.yml` file defines two services:
 
-  adminer:
-    image: adminer:latest
-    restart: always
-    ports:
-      - "8080:8080"
+- `db`: Runs the latest PostgreSQL image with environment variables for user, password, and database name. It exposes port 5432 and persists data using a Docker volume.
+- `adminer`: Runs the Adminer image, exposing port 8080 for browser-based database management.
 
-volumes:
-  pgdata:
-```
+Starting these services is done with `docker-compose up -d`, enabling a consistent and reproducible environment.
 
-To start the services, run the following command:
+### Java and Maven Project Structure
 
-```bash
-docker-compose up -d
-```
+The Java application follows a standard Maven directory layout:
 
-## Step 2: Set Up Maven Project
+- Source code resides in `src/main/java/com/createdb/`, containing `DatabaseClient.java` for database connectivity and `Main.java` as the application entry point.
+- SQL scripts defining the database schema are stored in the `sql/` directory, including tables such as `CallNumbers`, `Contributors`, `Items`, `Resources`, and `Subjects`.
+- The `pom.xml` file manages project dependencies, notably the PostgreSQL JDBC driver required for database communication.
 
-Create a new Maven project structure:
+### Database Connectivity
 
-```
-my-java-project/
-├── src/
-│   └── main/
-│       └── java/
-│           └── com/
-│               └── createdb/
-│                   ├── DatabaseClient.java
-│                   └── Main.java
-├── sql/
-│   ├── CallNumbers.sql
-│   ├── Contributors.sql
-│   ├── Items.sql
-│   ├── Resources.sql
-│   └── Subjects.sql
-├── pom.xml
-```
+`DatabaseClient.java` likely encapsulates connection management, executing SQL scripts to create tables and perform queries. This abstraction facilitates interaction with the database while isolating connection details.
 
-## Step 3: Define SQL Files
+## Implementation Details
 
-Create SQL files to define the tables:
+- The use of Docker Compose ensures that the database environment is portable and easily reproducible across different machines.
+- SQL scripts are separated from application code, promoting modularity and ease of schema updates.
+- Maven manages dependencies and build lifecycle, streamlining compilation and execution.
+- The project assumes familiarity with Java and Maven, and requires Docker for containerized database setup.
 
-### `sql/CallNumbers.sql`
+## Practical Notes
 
-```sql
-CREATE TABLE IF NOT EXISTS CallNumbers (
-    id VARCHAR(255) PRIMARY KEY,
-    callnumber VARCHAR(255) NOT NULL
-);
-```
+- Running `docker-compose up -d` initializes the database and Adminer; Adminer can be accessed via `http://localhost:8080` for manual inspection.
+- The PostgreSQL JDBC driver must be declared in `pom.xml` to allow Java code to connect to the database.
+- SQL scripts should be executed in order to establish the necessary tables before running application logic.
+- The project structure supports incremental development and testing of database interactions.
 
-### `sql/Contributors.sql`
+## Summary
 
-```sql
-CREATE TABLE IF NOT EXISTS Contributors (
-    id VARCHAR(255) PRIMARY KEY,
-    contributor VARCHAR(255) NOT NULL
-);
-```
-
-### `sql/Items.sql`
-
-```sql
-CREATE TABLE IF NOT EXISTS Items (
-    id SERIAL PRIMARY KEY,
-    callnumber VARCHAR(255) NOT NULL,
-    created_published VARCHAR(255),
-    date DATE,
-    notes TEXT,
-    sourcecollection VARCHAR(255),
-    title VARCHAR(255) NOT NULL,
-    externalid VARCHAR(255) UNIQUE NOT NULL
-);
-```
-
-### `sql/Resources.sql`
-
-```sql
-CREATE TABLE IF NOT EXISTS Resources (
-    id SERIAL PRIMARY KEY,
-    external_id VARCHAR(255) UNIQUE NOT NULL,
-    image VARCHAR(255),
-    pdf VARCHAR(255)
-);
-```
-
-### `sql/Subjects.sql`
-
-```sql
-CREATE TABLE IF NOT EXISTS Subjects (
-    id SERIAL PRIMARY KEY,
-    external_id VARCHAR(255) UNIQUE NOT NULL,
-    subject VARCHAR(255) NOT NULL
-);
-```
-
-## Step 4: Create Maven `pom.xml`
-
-Create a `pom.xml` file with the necessary dependencies and plugins:
-
-```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.example</groupId>
-    <artifactId>sup-court-db-normalizer</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.23</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-storage</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-bigquery</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>com.createdb.Main</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-```
-
-## Step 5: Write Java Code
-
-### `DatabaseClient.java`
-
-```java
-package com.createdb;
-
-import java.sql.*;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-public class DatabaseClient {
-    private Connection connection;
-
-    public DatabaseClient(String url, String user, String password) throws SQLException {
-        connection = DriverManager.getConnection(url, user, password);
-    }
-
-    // Execute SQL file
-    public void executeSqlFile(String filePath) throws SQLException, IOException {
-        String sql = new String(Files.readAllBytes(Paths.get(filePath)));
-        String[] sqlStatements = sql.split(";");
-
-        try (Statement stmt = connection.createStatement()) {
-            for (String statement : sqlStatements) {
-                if (!statement.trim().isEmpty()) {
-                    stmt.execute(statement.trim());
-                }
-            }
-        }
-    }
-
-    // Close connection
-    public void close() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
-    }
-}
-```
-
-### `Main.java`
-
-```java
-package com.createdb;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class Main {
-    public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
-        String user = "example";
-        String password = "example";
-        String dbName = "supreme-court";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement()) {
-
-            // Create the database if it doesn't exist
-            ResultSet resultSet = statement.executeQuery("SELECT 1 FROM pg_database WHERE datname = '" + dbName + "'");
-            if (!resultSet.next()) {
-                statement.executeUpdate("CREATE DATABASE "" + dbName + """);
-                System.out.println("Database " + dbName + " created successfully.");
-            } else {
-                System.out.println("Database " + dbName + " already exists.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Connect to the new database and execute SQL files to create tables
-        try {
-            String dbUrl = "jdbc:postgresql://localhost:5432/" + dbName;
-            DatabaseClient dbClient = new DatabaseClient(dbUrl, user, password);
-
-            // Execute SQL files to create tables
-            dbClient.executeSqlFile("sql/CallNumbers.sql");
-            dbClient.executeSqlFile("sql/Contributors.sql");
-            dbClient.executeSqlFile("sql/Items.sql");
-            dbClient.executeSqlFile("sql/Resources.sql");
-            dbClient.executeSqlFile("sql/Subjects.sql");
-
-            dbClient.close();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-## Step 6: Run the Project
-
-1. **Compile the project**:
-   ```bash
-   mvn compile
-   ```
-
-2. **Run the `Main` class**:
-   ```bash
-   mvn exec:java -Dexec.mainClass="com.createdb.Main"
-   ```
-
-This setup will create the `supreme-court` database if it does not exist and then execute the SQL files to create the tables. You can verify the results using Adminer by navigating to `http://localhost:8080` in your web browser.
-
-## Conclusion
-
-In this post, we set up a PostgreSQL database using Docker, created a Maven project to manage our Java code, defined our database tables with SQL files, and wrote Java code to automate the creation of the database and tables. This setup provides a robust foundation for further development and integration with your data processing applications.
+This repository serves as a foundational reference for integrating Java applications with PostgreSQL databases using Docker and Maven. It emphasizes reproducible environment setup, modular schema management, and clear separation between application code and database definitions. The approach lays groundwork for building scalable data workflows and complex applications requiring robust data storage solutions.
