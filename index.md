@@ -1,12 +1,26 @@
 ---
-slug: "github-sup-court-postgres-post"
-title: "sup-court-postgres-post"
-repo: "justin-napolitano/sup-court-postgres-post"
-githubUrl: "https://github.com/justin-napolitano/sup-court-postgres-post"
-generatedAt: "2025-11-23T09:41:41.833249Z"
-source: "github-auto"
+slug: github-sup-court-postgres-post
+title: Setting Up PostgreSQL with Java and Maven Using Docker Compose
+repo: justin-napolitano/sup-court-postgres-post
+githubUrl: https://github.com/justin-napolitano/sup-court-postgres-post
+generatedAt: '2025-11-23T09:41:41.833249Z'
+source: github-auto
+summary: >-
+  Reference for integrating PostgreSQL with Java via Maven, using Docker Compose and modular SQL
+  scripts to enable scalable data workflows.
+tags:
+  - postgresql
+  - java
+  - maven
+  - docker-compose
+  - database-setup
+seoPrimaryKeyword: postgresql java maven setup
+seoSecondaryKeywords:
+  - docker compose
+  - database connectivity
+  - sql scripts
+seoOptimized: true
 ---
-
 
 # Setting Up PostgreSQL with Java and Maven: A Technical Reference
 
@@ -58,3 +72,4 @@ The Java application follows a standard Maven directory layout:
 ## Summary
 
 This repository serves as a foundational reference for integrating Java applications with PostgreSQL databases using Docker and Maven. It emphasizes reproducible environment setup, modular schema management, and clear separation between application code and database definitions. The approach lays groundwork for building scalable data workflows and complex applications requiring robust data storage solutions.
+
