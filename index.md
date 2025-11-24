@@ -20,6 +20,12 @@ seoSecondaryKeywords:
   - database connectivity
   - sql scripts
 seoOptimized: true
+topicFamily: automation
+topicFamilyConfidence: 0.9
+topicFamilyNotes: >-
+  The post focuses on setting up a reproducible development environment integrating PostgreSQL with
+  Java and Maven using Docker Compose, emphasizing build automation, environment setup, and
+  deployment workflows which aligns best with the 'automation' family.
 ---
 
 # Setting Up PostgreSQL with Java and Maven: A Technical Reference
@@ -72,4 +78,5 @@ The Java application follows a standard Maven directory layout:
 ## Summary
 
 This repository serves as a foundational reference for integrating Java applications with PostgreSQL databases using Docker and Maven. It emphasizes reproducible environment setup, modular schema management, and clear separation between application code and database definitions. The approach lays groundwork for building scalable data workflows and complex applications requiring robust data storage solutions.
+
 
