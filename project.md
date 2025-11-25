@@ -7,8 +7,8 @@ githubUrl: https://github.com/justin-napolitano/sup-court-postgres-post
 generatedAt: '2025-11-24T21:36:31.174Z'
 source: github-auto
 summary: >-
-  Learn how to set up a Java project with PostgreSQL using Docker and Maven,
-  including installation and project structure.
+  Learn how to set up a Java project with PostgreSQL using Docker and Maven, including installation
+  and project structure.
 tags:
   - java
   - postgresql
@@ -25,8 +25,8 @@ seoSecondaryKeywords:
   - adminer setup
   - sql database management
 seoOptimized: true
-topicFamily: null
-topicFamilyConfidence: null
+topicFamily: devtools
+topicFamilyConfidence: 0.9
 kind: project
 entryLayout: project
 showInProjects: true
@@ -118,4 +118,5 @@ my-java-project/
 - Add unit and integration tests for database interactions
 - Explore performance optimizations for large-scale data handling
 - Provide detailed documentation and usage examples
+
 
